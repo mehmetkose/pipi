@@ -8,7 +8,7 @@ except IOError:
 
 setup(
     name="pipi",
-    version="0.0.1",
+    version="0.0.2",
     description="install & save functionality for pip",
     long_description=readme,
     author="Mehmet Kose",
