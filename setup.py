@@ -9,7 +9,7 @@ except IOError:
 setup(
     name="pipi",
     version="0.0.1",
-    description="Install and save to requirements.txt functionality",
+    description="install & save functionality for pip",
     long_description=readme,
     author="Mehmet Kose",
     author_email="mehmet.py@gmail.com",

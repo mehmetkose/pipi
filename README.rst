@@ -1,7 +1,7 @@
-pipi [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/mehmetkose/pipi/edit/master/README.md)
+pipi
 ====
 
-Python dependency install & save tool for pip.
+install & save functionality for pip.
 
 Usage
 ~~~~~~~~~~~~
@@ -10,7 +10,7 @@ Usage
 
     pipi package_name
 
-    (almost same as 'pip install package_name && pip freeze > requirements.txt')
+    like 'pip install package_name && pip freeze > requirements.txt'
 
 Installation
 ~~~~~~~~~~~~
