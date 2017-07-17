@@ -6,13 +6,6 @@ import sys, subprocess, os
 def package_slug(package_name):
     return package_name.split('==')[0].strip()
 
-def run_command(command):
-    try:
-        return subprocess.check_output(command.split())
-    except:
-        pass
-    return False
-
 def write_to_file(line, file_path):
     with open(file_path, "a") as myfile:
         myfile.write(line)
@@ -33,24 +26,25 @@ def main():
     packages_to_install = sys.argv[1:]
     for package_to_install in packages_to_install:
         if not package_slug(package_to_install) in installed_package_slugs:
-            install_command = "pip install %s" % package_to_install
-            result = run_command(install_command)
-            if result:
-                for line in result.lower().split("\n"):
-                    if "successfully installed" in line:
-                        for piece in line.split():
-                            if package_to_install in piece:
-                                correct_version = piece.split('-')[-1]
-                                requirement_line = "%s==%s\n" % (package_to_install,
-                                                                 correct_version)
-                                write_to_file(requirement_line,requirements_path)
-                                print("pipi: %s installed & saved to requirements.txt" % \
-                                      requirement_line.replace("\n",""))
-            else:
-                print("pipi: %s could not be installed properly" % package_to_install)
+            install_command = "pip install %s" % (package_to_install)
+            process = subprocess.Popen(install_command.split(), stdout=subprocess.PIPE)
+            for line in process.stdout.readlines():
+                if "Successfully installed" in line:
+                    for piece in line.split():
+                        if package_to_install in piece:
+                            correct_version = piece.split('-')[-1]
+                            requirement_line = "%s==%s\n" % (package_to_install,
+                                                                correct_version)
+                            write_to_file(requirement_line,requirements_path)
+                            print("pipi: %s installed & saved." % \
+                                  requirement_line.replace("\n",""))
+                elif "already satisfied: %s" % (package_to_install) in line:
+                    print("pipi: %s is already installed" % package_to_install)
+                    requirement_line = "%s\n" % (package_to_install)
+                    write_to_file(requirement_line,requirements_path)
+
         else:
             print("pipi: %s is already installed" % package_to_install)
-
 
 if __name__ == "__main__":
     main()

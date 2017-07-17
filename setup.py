@@ -9,7 +9,7 @@ except IOError:
 setup(
     name="pipi",
     version="0.0.2",
-    description="install & save functionality for pip",
+    description="shortcut install & freeze pip packages",
     long_description=readme,
     author="Mehmet Kose",
     author_email="mehmet.py@gmail.com",

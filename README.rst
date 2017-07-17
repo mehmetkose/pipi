@@ -1,7 +1,7 @@
 pipi
 ====
 
-install & save functionality for pip.
+shortcut install & freeze pip packages
 
 Usage
 ~~~~~
@@ -9,7 +9,8 @@ Usage
 ::
 
     pipi package_name
-    like 'pip install package_name && pip freeze > requirements.txt'
+
+that command will install the package via pip & will store correct version to requirements.txt
 
 
 Installation
