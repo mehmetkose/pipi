@@ -19,6 +19,7 @@ class TestFunctions(TestMain):
         self.assertEqual(pipi.package_slug("test==4.4.4"), 'test')
         self.assertEqual(pipi.package_slug("test-package==4.4.4"), 'test-package')
         self.assertEqual(pipi.package_slug("test-package>=4.4.4"), 'test-package')
+        self.assertEqual(pipi.package_slug("test-package~=4.4.4"), 'test-package')
 
     def test_requirements(self):
         path = pipi.create_req_if_not_exists(self.maindir)

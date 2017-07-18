@@ -4,7 +4,7 @@
 import sys, subprocess, os
 
 def package_slug(package_name):
-    for sign in ['==', '>=']:
+    for sign in ['==', '>=', '~=']:
         if sign in package_name:
             return package_name.split(sign)[0].strip()
     return package_name
@@ -22,7 +22,7 @@ def create_req_if_not_exists(current_dir):
 
 def main():
     current_dir = os.getcwd()
-    create_req_if_not_exists(current_dir)
+    requirements_path = create_req_if_not_exists(current_dir)
     # read lines
     data = open(requirements_path, 'r')
     installed_packages = [line.strip("\n") for line in data.readlines()]
@@ -31,8 +31,8 @@ def main():
     packages = sys.argv[1:]
     for package in packages:
         if not package_slug(package) in installed_package_slugs:
-            install_command = "pip install %s".split() % (package)
-            process = subprocess.Popen(install_command, cwd=current_dir, stdout=subprocess.PIPE)
+            install_command = "pip install %s" % (package)
+            process = subprocess.Popen(install_command.split(), cwd=current_dir, stdout=subprocess.PIPE)
             result = False
             for line in process.stdout.readlines():
                 line = line.decode("utf-8").replace("\n","")
