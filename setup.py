@@ -8,7 +8,7 @@ except IOError:
 
 setup(
     name="pipi",
-    version="0.0.2",
+    version="0.0.3",
     description="shortcut install & freeze pip packages",
     long_description=readme,
     author="Mehmet Kose",
@@ -27,6 +27,8 @@ setup(
         "Programming Language :: Python :: 3.2",
         "Programming Language :: Python :: 3.3",
         "Programming Language :: Python :: 3.4",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
         "License :: OSI Approved :: MIT License",
         "Topic :: Software Development :: Build Tools",
         "Topic :: Software Development :: Libraries :: Python Modules",

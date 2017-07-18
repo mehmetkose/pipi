@@ -23,28 +23,37 @@ def main():
     installed_packages = [line.strip("\n") for line in data.readlines()]
     installed_package_slugs = [package_slug(package) for package in installed_packages]
     # get arguments
-    packages_to_install = sys.argv[1:]
-    for package_to_install in packages_to_install:
-        if not package_slug(package_to_install) in installed_package_slugs:
-            install_command = "pip install %s" % (package_to_install)
+    packages = sys.argv[1:]
+    for package in packages:
+        if not package_slug(package) in installed_package_slugs:
+            install_command = "pip install %s" % (package)
             process = subprocess.Popen(install_command.split(), stdout=subprocess.PIPE)
+            result = False
             for line in process.stdout.readlines():
+                line = str(line)
                 if "Successfully installed" in line:
                     for piece in line.split():
-                        if package_to_install in piece:
+                        if len(piece)>0 and package in piece:
                             correct_version = piece.split('-')[-1]
-                            requirement_line = "%s==%s\n" % (package_to_install,
+                            requirement_line = "%s==%s\n" % (package,
                                                                 correct_version)
                             write_to_file(requirement_line,requirements_path)
-                            print("pipi: %s installed & saved." % \
-                                  requirement_line.replace("\n",""))
-                elif "already satisfied: %s" % (package_to_install) in line:
-                    print("pipi: %s is already installed" % package_to_install)
-                    requirement_line = "%s\n" % (package_to_install)
-                    write_to_file(requirement_line,requirements_path)
-
+                            result = "pipi: %s installed & saved." % \
+                                  requirement_line.strip()
+                elif "already satisfied: %s" % (package) in line:
+                    result = "pipi: %s is already installed" % package
+                    requirement_line = "%s\n" % (package)
+                    write_to_file(requirement_line, requirements_path)
+                elif "BrokenPipeError" in line:
+                    break
+                else:
+                    #print(str(line))
+                    print(str(line))
+                    #print(type(str(line)))
+            print("\n"+result)
         else:
-            print("pipi: %s is already installed" % package_to_install)
+            print("pipi: %s is already installed" % package)
+
 
 if __name__ == "__main__":
     main()
