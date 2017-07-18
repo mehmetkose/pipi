@@ -2,15 +2,15 @@ from setuptools import setup
 
 try:
     with open('README.rst') as f:
-        readme = f.read()
+        long_description = f.read()
 except IOError:
-    readme = ''
+    long_description = ''
 
 setup(
     name="pipi",
-    version="0.0.3",
+    version="0.0.4",
     description="shortcut install & freeze pip packages",
-    long_description=readme,
+    long_description=long_description,
     author="Mehmet Kose",
     author_email="mehmet.py@gmail.com",
     url="https://github.com/mehmetkose/pipi",

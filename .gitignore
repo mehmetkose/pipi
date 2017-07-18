@@ -57,3 +57,4 @@ docs/_build/
 
 .DS_Store
 requirements.txt
+run_tests.sh
