@@ -30,7 +30,7 @@ def main():
             process = subprocess.Popen(install_command.split(), stdout=subprocess.PIPE)
             result = False
             for line in process.stdout.readlines():
-                line = str(line)
+                line = line.decode("utf-8").replace("\n","")
                 if "Successfully installed" in line:
                     for piece in line.split():
                         if len(piece)>0 and package in piece:
@@ -38,8 +38,7 @@ def main():
                             requirement_line = "%s==%s\n" % (package,
                                                                 correct_version)
                             write_to_file(requirement_line,requirements_path)
-                            result = "pipi: %s installed & saved." % \
-                                  requirement_line.strip()
+                            result = "pipi: %s installed & saved." % requirement_line.strip()
                 elif "already satisfied: %s" % (package) in line:
                     result = "pipi: %s is already installed" % package
                     requirement_line = "%s\n" % (package)
@@ -47,10 +46,9 @@ def main():
                 elif "BrokenPipeError" in line:
                     break
                 else:
-                    #print(str(line))
                     print(str(line))
-                    #print(type(str(line)))
-            print("\n"+result)
+            if result:
+                print("\n"+result)
         else:
             print("pipi: %s is already installed" % package)
 
