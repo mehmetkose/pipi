@@ -17,14 +17,11 @@ Usage
     pipi pillow
     pipi rethinkdb
 
-that command will install the package via pip & will store correct version to requirements.txt
-
 every single operation works like:
 
 1. Create requirements.txt if not exists.
-2. Try install the package if not installed
-3. Append to the requirements.txt if the operation is successful
-
+2. Try install the package if not installed.
+3. Append to the requirements.txt if the operation is successful.
 
 Installation
 ~~~~~~~~~~~~
