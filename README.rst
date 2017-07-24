@@ -7,9 +7,6 @@ pipi
 
 shortcut install & freeze pip packages
 
-.. image:: https://github.com/mehmetkose/pipi/blob/master/usage.gif?raw=true
-   :alt: pipi usage
-
 Installation
 ~~~~~~~~~~~~
 
@@ -23,10 +20,10 @@ Usage
 
 ::
 
-    pipi [package_name]
-    pipi requests
-    pipi pillow
-    pipi rethinkdb
+    pipi install [package_name]
+    pipi i [package_name]
+    pipi install requests
+    pipi i requests
 
 every single operation works like:
 
