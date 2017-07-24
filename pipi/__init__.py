@@ -21,9 +21,10 @@ def create_req_if_not_exists(current_dir):
     return requirements_path
 
 def parge_arguments(arguments=sys.argv):
-    action = arguments[1]
-    packages = arguments[2:]
-    return action, packages
+    if len(arguments)>2:
+        return arguments[1], arguments[2:]
+    else:
+        return None, None
 
 def main():
     current_dir = os.getcwd()
@@ -34,7 +35,7 @@ def main():
     installed_package_slugs = [package_slug(package) for package in installed_packages]
     # get arguments
     action, packages = parge_arguments(sys.argv)
-    if action == "install" or action == "i":
+    if action and action == "install" or action == "i":
         for package in packages:
             if not package_slug(package) in installed_package_slugs:
                 install_command = "pip install %s" % (package)
@@ -61,14 +62,13 @@ def main():
                     print("\n"+result)
             else:
                 print("pipi: %s is already installed" % package)
+
     else:
-        help_commands = """
-            pipi parameters: ["install", "uninstall"]
-            Examples:
-                pipi install tornado
-                pipi install tornado torethink tornado-uvloop
-                pipi i tornado
-        """
+        help_commands = 'pipi parameters: ["install", "uninstall"]\n'\
+            'Examples:\n'\
+                '\tpipi install [package]\n'\
+                '\tpipi install [package1] [package2] [package3]\n'\
+                '\tpipi i [package]'
         print(help_commands)
 
 

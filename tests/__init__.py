@@ -17,11 +17,19 @@ class TestFunctions(TestMain):
 
     def test_package_slug(self):
         self.assertEqual(pipi.package_slug("test==4.4.4"), 'test')
+        self.assertEqual(pipi.package_slug("test>=4.4.4"), 'test')
+        self.assertEqual(pipi.package_slug("test~=4.4.4"), 'test')
+
         self.assertEqual(pipi.package_slug("test-package==4.4.4"), 'test-package')
         self.assertEqual(pipi.package_slug("test-package>=4.4.4"), 'test-package')
         self.assertEqual(pipi.package_slug("test-package~=4.4.4"), 'test-package')
 
     def test_parse_arguments(self):
+        arguments = ["/yup/yup"]
+        result_action, result_packages = pipi.parge_arguments(arguments)
+        self.assertEqual(result_action, None)
+        self.assertEqual(result_packages, None)
+
         arguments = ["/yup/yup", "install", "tornado", "requests"]
         result_action, result_packages = pipi.parge_arguments(arguments)
         self.assertEqual(result_action, "install")
