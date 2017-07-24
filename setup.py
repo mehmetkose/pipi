@@ -8,7 +8,7 @@ except IOError:
 
 setup(
     name="pipi",
-    version="0.0.6",
+    version="1.0.0",
     description="shortcut install & freeze pip packages",
     long_description=long_description,
     author="Mehmet Kose",

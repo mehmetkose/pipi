@@ -21,6 +21,17 @@ class TestFunctions(TestMain):
         self.assertEqual(pipi.package_slug("test-package>=4.4.4"), 'test-package')
         self.assertEqual(pipi.package_slug("test-package~=4.4.4"), 'test-package')
 
+    def test_parse_arguments(self):
+        arguments = ["/yup/yup", "install", "tornado", "requests"]
+        result_action, result_packages = pipi.parge_arguments(arguments)
+        self.assertEqual(result_action, "install")
+        self.assertEqual(result_packages, ["tornado", "requests"])
+
+        arguments = ["/yup/yup", "i", "tornado", "requests"]
+        result_action, result_packages = pipi.parge_arguments(arguments)
+        self.assertEqual(result_action, "i")
+        self.assertEqual(result_packages, ["tornado", "requests"])
+
     def test_requirements(self):
         path = pipi.create_req_if_not_exists(self.maindir)
         self.assertEqual('%s/requirements.txt' % (self.maindir), path)
@@ -34,7 +45,7 @@ class TestFunctions(TestMain):
 class TestResults(TestMain):
 
     def test_results(self):
-        command = "pipi tornado".split()
+        command = "pipi i tornado".split()
         proc = subprocess.Popen(command, cwd=self.maindir, stdout=subprocess.PIPE)
         data, err = proc.communicate()
         self.assertIsNone(err)
