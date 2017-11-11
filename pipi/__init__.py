@@ -6,12 +6,17 @@ import sys, subprocess, os
 def package_slug(package_name):
     for sign in ['==', '>=', '~=']:
         if sign in package_name:
-            return package_name.split(sign)[0].strip()
+            return package_name.strip().split(sign)[0].strip()
     return package_name
 
 def write_to_file(line, file_path):
     with open(file_path, "a") as myfile:
         myfile.write(line)
+
+def get_requirements_lines(current_dir):
+    requirements_path = "%s/requirements.txt" % (current_dir)
+    content = open(requirements_path, 'r').read()
+    return content.split("\n")
 
 def create_req_if_not_exists(current_dir):
     requirements_path = "%s/requirements.txt" % (current_dir)
@@ -26,6 +31,10 @@ def parge_arguments(arguments=sys.argv):
     else:
         return None, None
 
+def run_command_read_lines(command):
+    process = subprocess.Popen(command.split(), cwd=os.getcwd(), stdout=subprocess.PIPE)
+    return [line.decode("utf-8").replace("\n","") for line in process.stdout.readlines()]
+
 def main():
     current_dir = os.getcwd()
     requirements_path = create_req_if_not_exists(current_dir)
@@ -38,14 +47,12 @@ def main():
     if action and action == "install" or action == "i":
         for package in packages:
             if not package_slug(package) in installed_package_slugs:
-                install_command = "pip install %s" % (package)
-                process = subprocess.Popen(install_command.split(), cwd=current_dir, stdout=subprocess.PIPE)
                 result = False
-                for line in process.stdout.readlines():
-                    line = line.decode("utf-8").replace("\n","")
+                install_command = "pip install %s" % (package)
+                for line in run_command_read_lines(install_command):
                     if "Successfully installed" in line:
                         for piece in line.split():
-                            if len(piece)>0 and package in piece:
+                            if len(piece) and package in piece:
                                 correct_version = piece.split('-')[-1]
                                 requirement_line = "%s==%s\n" % (package, correct_version)
                                 write_to_file(requirement_line,requirements_path)
@@ -63,12 +70,23 @@ def main():
             else:
                 print("pipi: %s is already installed" % package)
 
+    elif action and action == "remove" or action == "r":
+        for package in packages:
+            remove_command = "pip uninstall -y %s" % (package)
+            requirement_lines = get_requirements_lines(current_dir)
+            for line in run_command_read_lines(remove_command):
+                if "Successfully uninstalled %s" % (package) in line:
+                    for requirement_line in requirement_lines:
+                        if "%s-" % package in requirement_line:
+                            print(requirement_line)
+
+
     else:
         help_commands = 'pipi parameters: ["install", "uninstall"]\n'\
             'Examples:\n'\
                 '\tpipi install [package]\n'\
                 '\tpipi install [package1] [package2] [package3]\n'\
-                '\tpipi i [package]'
+                '\tpipi i [package]\n'
         print(help_commands)
 
 

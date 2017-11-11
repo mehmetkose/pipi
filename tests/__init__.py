@@ -40,6 +40,14 @@ class TestFunctions(TestMain):
         self.assertEqual(result_action, "i")
         self.assertEqual(result_packages, ["tornado", "requests"])
 
+    def test_run_command_read_lines(self):
+        is_in = False
+        command = "pip list --format columns"
+        for line in pipi.run_command_read_lines(command):
+            if 'pipi' in line:
+                is_in = True
+        self.assertTrue(is_in)
+
     def test_requirements(self):
         path = pipi.create_req_if_not_exists(self.maindir)
         self.assertEqual('%s/requirements.txt' % (self.maindir), path)
